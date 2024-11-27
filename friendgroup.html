@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>friendgroup</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Consolas, sans-serif;
+            background-color: black;
+            color: white;
+        }
+
+        #usernameScreen, #chatScreen {
+            display: none;
+            height: 100vh;
+            justify-content: top;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #usernameScreen.active, #chatScreen.active {
+            display: flex;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        #chatScreen {
+            padding: 20px;
+            box-sizing: border-box;
+            align-items: flex-start;
+        }
+
+        #chatScreen h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #0066ff;
+        }
+        
+		#messageInput {
+			background-color: #59595959;
+			color: #ffffff;
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .chat-box {
+			background-color: #000000;
+			color: #00ff00;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column-reverse; /* Makes new messages appear at the top */
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            background-color: #000000;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+            display: inline-block;
+            color: #00ff00;
+        }
+
+        .message:before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 10px 10px 0;
+            border-color: transparent darkgray transparent transparent;
+            position: absolute;
+            top: 0;
+            left: -10px;
+        }
+
+        .username {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Username Screen -->
+    <div id="usernameScreen" class="active">
+        <input id="usernameInput" type="text" placeholder="Who do you think you are?">
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chatScreen">
+    <h1>friendgroup</h1>
+	<h3>connect with your friends with 100% freedom!</h3>
+    <input id="messageInput" type="text" placeholder="Say literally ANYTHING!">
+    <div class="chat-box" id="chatBox"></div>
+</div>
+
+
+    <script>
+        const usernameScreen = document.getElementById('usernameScreen');
+        const chatScreen = document.getElementById('chatScreen');
+        const usernameInput = document.getElementById('usernameInput');
+        const messageInput = document.getElementById('messageInput');
+        const chatBox = document.getElementById('chatBox');
+        let username = '';
+
+        // Enter username
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && usernameInput.value.trim() !== '') {
+                username = usernameInput.value.trim();
+                usernameScreen.classList.remove('active');
+                chatScreen.classList.add('active');
+            }
+        });
+
+        // Send message
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && messageInput.value.trim() !== '') {
+                const message = messageInput.value.trim();
+                addMessage(username, message);
+                messageInput.value = '';
+            }
+        });
+
+        // Add message to chat
+function addMessage(username, message) {
+    const messageElement = document.createElement('div');
+    const usernameElement = document.createElement('div');
+    usernameElement.className = 'username';
+    usernameElement.textContent = username;
+
+    messageElement.className = 'message';
+    messageElement.textContent = `> ${message}`; // Add ">" before the message
+
+    const messageContainer = document.createElement('div');
+    messageContainer.appendChild(usernameElement);
+    messageContainer.appendChild(messageElement);
+
+    chatBox.appendChild(messageContainer);
+
+    // Scroll to the top
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+    </script>
+</body>
+</html>
