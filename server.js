@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-
 const app = express();
-app.use(cors());
+const port = 3000;
+
 app.use(bodyParser.json());
 
-let messages = []; // Temporary in-memory storage
+let messages = [];  // Store messages in memory (you can replace this with a database)
 
-// Endpoint to get all messages
+// Endpoint to get messages
 app.get('/messages', (req, res) => {
     res.json(messages);
 });
@@ -17,8 +16,9 @@ app.get('/messages', (req, res) => {
 app.post('/messages', (req, res) => {
     const { username, message } = req.body;
     messages.push({ username, message });
-    res.sendStatus(200);
+    res.status(201).send();
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});
